@@ -14,7 +14,7 @@ var SERVER_READY = 1 // 1 if ready, 0 if not
 
 
 func main() {
-	changeServerStatus()
+	//changeServerStatus()
 	listener, err := net.Listen("tcp", "127.0.0.1:" + LISTENING_PORT)
 	if err != nil {
 		fmt.Println(err)
