@@ -9,3 +9,7 @@ Functionality:
 Supported commands:
 - @exit - for closing connection and exit from client utility
 - @conf - for requesting a some config variables from the server
+
+Launching steps:
+1. In server folder, execute command: go build && ./server
+2. In client folder, execute command: go build && ./client
