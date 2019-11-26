@@ -1,5 +1,6 @@
 package main
 import (
+	"../simpleproto"
 	"fmt"
 	"net"
 	"os"
@@ -20,13 +21,14 @@ func clientResponse(message string) string{
 
 
 func main() {
-	conn, err := net.Dial("tcp", "0.0.0.0:" + SERVER_PORT)
+	conn, err := net.Dial("tcp", "127.0.0.1:" + SERVER_PORT)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	defer conn.Close()
 	for{
+		simpleproto.HandShakeClient(conn)
 		var message string
 		fmt.Print("Message" + " > ")
 		_, err := fmt.Scanln(&message)

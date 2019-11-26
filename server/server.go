@@ -1,6 +1,7 @@
 package main
 
 import (
+	"../simpleproto"
 	"fmt"
 	"net"
 	"strings"
@@ -9,10 +10,12 @@ import (
 
 const SERVER_PREFIX = "testserver"
 const LISTENING_PORT = "6800"
+var SERVER_READY = 1 // 1 if ready, 0 if not
 
 
 func main() {
-	listener, err := net.Listen("tcp", "0.0.0.0:" + LISTENING_PORT)
+	changeServerStatus()
+	listener, err := net.Listen("tcp", "127.0.0.1:" + LISTENING_PORT)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -57,11 +60,24 @@ func logger(username, message string) {
 	}
 }
 
+func changeServerStatus(){
+	fmt.Print("Change server status (0/1) " + " > ")
+	_, err := fmt.Scanln(&SERVER_READY)
+	if err != nil {
+		fmt.Println("Некорректный ввод", err)
+	}
+}
 
 // working with client
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
 	for {
+		if SERVER_READY == 1 {
+			simpleproto.HandShakeServer(conn, 1)
+		} else {
+			simpleproto.HandShakeServer(conn, 0)
+			continue
+		}
 		// read input message
 		input := make([]byte, 1024 * 4)
 		n, err := conn.Read(input)
